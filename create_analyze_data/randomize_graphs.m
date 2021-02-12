@@ -12,7 +12,8 @@ attempts = 1;
 myIter = i;
 [R, eff] = randmio_dir_connected(W,iter,myIter,attempts);
 eff
-fname = ['edge_list_randomized_myiter_', num2str(myIter), '_attempts_', num2str(attempts), '_effRewirings_',num2str(eff), '.csv']
+% fname = ['edge_list_randomized_myiter_', num2str(myIter), '_attempts_', num2str(attempts), '_effRewirings_',num2str(eff), '.csv']
+fname = ['well00_day', num2str(eff), '.txt']
 fid = fopen(fname, 'w');
 [a,b] = find(R>0);
 for r = 1: size(a,1)
