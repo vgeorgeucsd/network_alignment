@@ -7,18 +7,22 @@ nThreads=4
 population=100
 iterations=100
 
-# balance between edge and node similarity, alpha as 0.5 is a balance between node and edge, alpha as 1 is only using node
-alpha=1
+# balance between edge and node similarity, alpha as 0.5 is a balance between node and edge, alpha as 1 is only using edges
+alpha=0
 # edge conservation options, they are: EC, ICS, S3
 edgeConservation=EC
 
 # The well you would like to analyze
 wellname=well34
 # your file paths
-networkPath=/home/vivek/research/organoids/original_data/network_edge_lists
-nodeSimilarityPath=/home/vivek/research/organoids/original_data/similarity_lists/${wellname}_lists
-output_path=/home/vivek/research/organoids/output_data/magna/${wellname}_outputs
+networkPath=/home/vikash/SecondDrive/network_edge_lists
+nodeSimilarityPath=/home/vikash/SecondDrive/${wellname}_lists
+output_path=/home/vikash/SecondDrive/output_data/magna/${wellname}_outputs/
 
+if [ ! -d ${output_path} ]
+then
+    mkdir ${output_path}
+fi
 # your output prefixes
 outFileName=${wellname}_p_${population}_i_${iterations}_a_${alpha}_temp_out
 
@@ -49,6 +53,7 @@ for filename in ${nodeSimilarityPath}/*.csv; do
 
      ./magnapp_cli_linux64 -G ${G} -H ${H} -d tempNodeSimFile_${d1}_${d2}.csv -o ${outFileName}_${wellname}_${d1}_${d2} -m ${edgeConservation} -p ${population} -n ${iterations} -a ${alpha} -t ${nThreads} >> temp.out
 
+
      rm tempNodeSimFile_${d1}_${d2}.csv
 
    else
@@ -60,9 +65,10 @@ for filename in ${nodeSimilarityPath}/*.csv; do
 
      ./magnapp_cli_linux64 -G ${G} -H ${H} -d tempNodeSimFile_${d2}_${d1}.csv -o ${outFileName}_${wellname}_${d2}_${d1} -m ${edgeConservation} -p ${population} -n ${iterations} -a ${alpha} -t ${nThreads} >> temp.out
 
+
      rm tempNodeSimFile_${d2}_${d1}.csv
    fi
 done
-mv temp* outputs/
+mv temp.out ${output_path}/${wellname}_p_${population}_i_${iterations}__main.out
 # ./magnapp_cli_linux64 -G ${graphPath}/ex1.txt -H ${graphPath}/ex2.txt -d ${graphPath}/exgdvsim.csv -o ${outFileName} -m EC -p 10 -n 10 -a 0.5
-# mv ${outFileName}* ${output_path}
+mv ${outFileName}* ${output_path}
