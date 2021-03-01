@@ -1,0 +1,21 @@
+These are commands which seem to work:
+Edge list format as input
+./sana -t 1 -ec 1 -fg2 networks/yeast/yeast.el -fg1 networks/syeast0/syeast0.el
+
+Note, that we can not have an edge from a--b and b--a, that is considered a repeated edge and is causes a core dump
+
+Here is a working example of the toy example:
+./sana -t 1 -fg1 /home/vivek/research/organoids/sample_data/networks/toy/1.el -fg2 /home/vivek/research/organoids/sample_data/networks/toy/2.el -ec 1
+
+
+     "-esim", "dbl_vec", "0", "External Similarity Weights", "An integer followed by that many weights, specifying objective function weights for external similarity files (must be the same integer as given to -simFile and -simFormat).", "1" 
+
+     "-simFormat", "int_vec", "0", "Similarity File Formats", "An integer (must be the same one used by -esim and -simFiles) followed by that many integer simFormats. Allowed values are 2=G1 doubles down by G2 doubles across matrix where node order corresponds to .gw files; 1=node names; 0=node integers numbered as in LEDA .gw format.", "0" 
+
+     "-simFile", "str_vec", "0", "External Similarity Filenames", "An integer (same integer as given to -esim and -simFormat) followed by that many filenames, specifying external three-columnn (node from G1, node from  G2, similarity) similarities. The similarities in the 3rd column will be normalized to be in [0,1]. These simFiles will be given weight according to the -esim argument.", "1" 
+
+Sample external input file:
+The example requires a metrix file for the similarity
+./sana -t 1 -fg1 /home/vivek/research/organoids/sample_data/networks/toy/ex11.gw -fg2 /home/vivek/research/organoids/sample_data/networks/toy/ex2.gw -graphlet 1 -esim 1 1 -simFormat 1 2 -simFile 1 /home/vivek/research/organoids/sample_data/networks/toy/matrix.csv
+
+
