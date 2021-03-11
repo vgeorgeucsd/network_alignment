@@ -4,8 +4,9 @@
 # the number of threads you wish to use
 nThreads=8
 # genetic algorithm settings
-population=10000
-iterations=10000
+population=POP_NUMBER
+iterations=IT_NUMBER
+gap=GAP
 
 # balance between edge and node similarity, alpha as 0.5 is a balance between node and edge, alpha as 1 is only using edges
 alpha=0
@@ -13,11 +14,11 @@ alpha=0
 edgeConservation=EC
 
 # The well you would like to analyze
-wellname=well22
+wellname=wellWELL_NUMBER
 # your file paths
-networkPath=/home/vikash/ssd2/SecondDrive/network_edge_lists
-nodeSimilarityPath=/home/vikash/ssd2/SecondDrive/${wellname}_lists
-output_path=/home/vikash/ssd2/SecondDrive/output_data/magna/${wellname}_outputs/
+networkPath=NETWORK_PATH
+nodeSimilarityPath=SIMILARITY_LIST_PATH
+output_path=MAGNA_OUTPUT_PATH
 
 if [ ! -d ${output_path} ]
 then
@@ -69,6 +70,6 @@ for filename in ${nodeSimilarityPath}/*.csv; do
      rm tempNodeSimFile_${d2}_${d1}.csv
    fi
 done
-mv temp.out ${output_path}/${wellname}_p_${population}_i_${iterations}__main.out
+mv temp.out ${output_path}/${wellname}Gap${gap}_p_${population}_i_${iterations}__main.out
 # ./magnapp_cli_linux64 -G ${graphPath}/ex1.txt -H ${graphPath}/ex2.txt -d ${graphPath}/exgdvsim.csv -o ${outFileName} -m EC -p 10 -n 10 -a 0.5
 mv ${outFileName}* ${output_path}
