@@ -24,14 +24,15 @@ def make_Orbit_Degree_Matrix_Dictionary(inpath):
         
         ii = None
         
-        if txt.endswith(".signatures.txt"):
-            ii = 0
-        elif txt.endswith(".dictionary.txt"):
-            ii = 1
-        else:
-            continue
+        if txt.startswith("well%s" %(well_number)):
+            if txt.endswith(".signatures.txt"):
+                ii = 0
+            elif txt.endswith(".dictionary.txt"):
+                ii = 1
+            else:
+                continue
             
-        orbit_degree_matrices_dictionary, days = appendPath(orbit_degree_matrices_dictionary, days, txt, inpath, ii)
+            orbit_degree_matrices_dictionary, days = appendPath(orbit_degree_matrices_dictionary, days, txt, inpath, ii)
     
     #graphlet_vector_matrix_dictionary = dict(sorted(graphlet_vector_matrix_dictionary.items(), key=lambda x: x[0]))
 
@@ -97,7 +98,7 @@ def store_Data_For_TimeGraphs(orbit_degree_matrices_dictionary, current_day, nex
         node_labels_2 = np.asarray(read_Node_Labels(next_graph[1]))
 
 
-    out = outpath + 'day' + str(current_day) + '_' + 'day' + str(next_day) + '_gap_' + str(gap) + '.csv'
+    out = outpath + 'day' + str(current_day) + '_' + 'day' + str(next_day) + '.csv'
     # IF MATRIX, CHANGE HERE. 
 
     return orbit_degree_matrix_1, orbit_degree_matrix_2, node_labels_1, node_labels_2, out
@@ -310,7 +311,7 @@ def In_Out_Paths(GAP, OUTPUT_FORMAT, cwd):
         GDS_dir = parent_dir + gap_dir                    # Specifies the gap in the directory
         
     ## Outpath needs gaps or not:
-    outpath = cwd + GDS_dir + 'well' + well_number + '/'  # where to place the similarity matrices
+    outpath = 'CHANGE_OUTPUT_PATH' + GDS_dir + 'well' + well_number + '/'  # where to place the similarity matrices
 
     ## Asks if directory exists:
     if os.path.isdir(outpath) == False:
@@ -336,7 +337,7 @@ WELLS = ['22', '23', '34']
     
 GAP = CHANGE_GAP  # CHANGE # Nonnegative number indicating the difference between time of compared graphs. '0' indicates adjacent time graphs.
 
-OUTPUT_FORMAT = 'list'   # If 'list', then does the procedure to convert matrix to list. Right now, 'list' produces both matrix and list format.
+OUTPUT_FORMAT = 'matrix'   # If 'list', then does the procedure to convert matrix to list. Right now, 'list' produces both matrix and list format.
 
 STOP_WATCH = False       # If 'True', then does timer operations
 
@@ -409,12 +410,14 @@ for d in range(0,len(days)-1):
         SimMatrix = np.zeros((len(orbit_degree_matrix_1), len(orbit_degree_matrix_2)))
 
         SimMatrix = populateSimilarityMatrix(orbit_degree_matrix_1, orbit_degree_matrix_2, SimMatrix)
-        print(SimMatrix[0])
 
         df = pd.DataFrame(data=SimMatrix, index=node_labels_1, columns=node_labels_2)
 
-        df.to_csv(out)
-
+        df.sort_index(inplace=True)
+        
+        df.sort_index(axis=1,inplace=True)
+        
+        df.to_csv(out,header=False,index=False)
 
         ## Get time to build matrix:
         if STOP_WATCH == True:
@@ -505,7 +508,7 @@ class OrbitDegreeSimilarityGraph:
     
     def populateSimilarityMatrix(self): 
 
-    ''' Function Purpose: Calculates the similarity between two orbit degree matrices. Stores similarity values in an empty matrix called SimMatrix 
+        ''' Function Purpose: Calculates the similarity between two orbit degree matrices. Stores similarity values in an empty matrix called SimMatrix 
     
         Variables: 
         1. self.orbit_degree_matrix_1 := the orbit degree matrix for graph 1
@@ -531,7 +534,7 @@ class OrbitDegreeSimilarityGraph:
         
     def Average_orbitDistance(self, node1, node2):
     
-    ''' Function Purpose: Computes similarity between to orbit degree vectors based on the average over all orbit distances.
+        ''' Function Purpose: Computes similarity between to orbit degree vectors based on the average over all orbit distances.
         
         Variables:
         1. orbit_degree_matrix_1 := orbit degree matrix for graph 1
@@ -560,7 +563,7 @@ class OrbitDegreeSimilarityGraph:
         
     def orbitDistance(self, node1, node2, orbit):
     
-    ''' Function Purpose: Computes the difference between two nodes with respect to a single orbit
+        ''' Function Purpose: Computes the difference between two nodes with respect to a single orbit
     
         Variables: 
         1. orbit_degree_matrix_1 := orbit degree matrix for graph 1
@@ -586,7 +589,7 @@ class OrbitDegreeSimilarityGraph:
     
     def calcOi(orbit):
     
-    ''' Function Purpose: Receives an orbit number and outputs the number of other orbits in which it depends on. 
+        ''' Function Purpose: Receives an orbit number and outputs the number of other orbits in which it depends on. 
         Ex: A center node (orbit) in a star depends on the number of times the node is a source node in a directed edge.'''
         
         oi_1 = [0, 1]

@@ -98,7 +98,7 @@ def store_Data_For_TimeGraphs(orbit_degree_matrices_dictionary, current_day, nex
         node_labels_2 = np.asarray(read_Node_Labels(next_graph[1]))
 
 
-    out = outpath + 'day' + str(current_day) + '_' + 'day' + str(next_day) + '_gap_' + str(gap) + '.csv'
+    out = outpath + 'day' + str(current_day) + '_' + 'day' + str(next_day) + '.csv'
     # IF MATRIX, CHANGE HERE. 
 
     return orbit_degree_matrix_1, orbit_degree_matrix_2, node_labels_1, node_labels_2, out
@@ -419,8 +419,11 @@ for d in range(0,len(days)-1):
 
         df = pd.DataFrame(data=SimMatrix, index=node_labels_1, columns=node_labels_2)
 
-        df.to_csv(out)
-
+        df.sort_index(inplace=True)
+        
+        df.sort_index(axis=1,inplace=True)
+        
+        df.to_csv(out,header=False,index=False)
 
         ## Get time to build matrix:
         if STOP_WATCH == True:
